@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "654163280788",
+    "firebase_url": "https://vouchchatsample.firebaseio.com",
+    "project_id": "vouchchatsample",
+    "storage_bucket": "vouchchatsample.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:654163280788:android:bd88a2422b401790",
+        "android_client_info": {
+          "package_name": "com.cypress.vouchchatsample"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "654163280788-2ff7g12pfna8hoaab38pbns737m6fn23.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPoM-Dkw9MMnBWtcoqprP32ussU76zyJY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
