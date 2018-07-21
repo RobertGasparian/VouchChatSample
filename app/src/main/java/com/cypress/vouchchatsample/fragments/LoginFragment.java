@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.cypress.vouchchatsample.R;
 import com.cypress.vouchchatsample.Utils;
+import com.cypress.vouchchatsample.activities.BaseActivity;
 import com.cypress.vouchchatsample.activities.MainActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -77,12 +78,15 @@ public class LoginFragment extends Fragment {
     }
 
     private void login(String email, String password) {
+        ((BaseActivity) getActivity()).showLoadingDialog();
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(getActivity(), task -> {
             if (task.isSuccessful()) {
+                ((BaseActivity) getActivity()).dismissLoadingDialog();
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
                 getActivity().finish();
             } else {
+                ((BaseActivity) getActivity()).dismissLoadingDialog();
                 Toast.makeText(getActivity(), R.string.sign_in_error_toast, Toast.LENGTH_LONG).show();
             }
         });

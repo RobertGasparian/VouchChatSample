@@ -1,43 +1,86 @@
 package com.cypress.vouchchatsample.models;
 
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.IgnoreExtraProperties;
+import com.stfalcon.chatkit.commons.models.IMessage;
+import com.stfalcon.chatkit.commons.models.MessageContentType;
+
 import java.util.Date;
 
-public class ChatMessage {
+@IgnoreExtraProperties
+public class ChatMessage implements IMessage, MessageContentType {
 
-    private String messageText;
-    private String messageUser;
-    private long messageTime;
+    private String text;
+    private String senderId;
+    private String senderName;
+    private String imageUrl;
+    private long date;
 
     public ChatMessage() {
     }
 
-    public ChatMessage(String messageText, String messageUser) {
-        this.messageText = messageText;
-        this.messageUser = messageUser;
-        messageTime = new Date().getTime();
+    public ChatMessage(String text, String senderName, String senderId) {
+        this.text = text;
+        this.senderName = senderName;
+        this.senderId = senderId;
+        date = new Date().getTime();
     }
 
-    public String getMessageText() {
-        return messageText;
+    @Exclude
+    @Override
+    public String getId() {
+        return senderId;
     }
 
-    public void setMessageText(String messageText) {
-        this.messageText = messageText;
+    public String getText() {
+        return text;
     }
 
-    public String getMessageUser() {
-        return messageUser;
+    @Exclude
+    @Override
+    public Sender getUser() {
+        return new Sender(senderId, senderName);
     }
 
-    public void setMessageUser(String messageUser) {
-        this.messageUser = messageUser;
+    @Exclude
+    @Override
+    public Date getCreatedAt() {
+        return new Date(date);
     }
 
-    public long getMessageTime() {
-        return messageTime;
+    public void setText(String text) {
+        this.text = text;
     }
 
-    public void setMessageTime(long messageTime) {
-        this.messageTime = messageTime;
+    public String getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(String senderId) {
+        this.senderId = senderId;
+    }
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public long getDate() {
+        return date;
+    }
+
+    public void setDate(long date) {
+        this.date = date;
     }
 }

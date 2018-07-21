@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="signup_color">#2789df</color>
+    <color name="colorPrimary">#f54919</color>
+    <color name="colorPrimaryDark">#ba3b18</color>
+    <color name="colorAccent">#40a6ff</color>
+    <color name="sign_up_color">#2789df</color>
+    <color name="transparent_color">#00000000</color>
+    <color name="separator_color">#E0E0E0</color>
 </resources>

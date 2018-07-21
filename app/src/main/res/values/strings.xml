@@ -2,13 +2,20 @@
     <string name="app_name">VouchChatSample</string>
     <string name="api_key">AIzaSyBk-kZepEY2I_ppwmXTF90qVHd4yy1ohBM</string>
     <string name="login_btn">Login</string>
-    <string name="signin_title">Sign In</string>
+    <string name="sign_in_title">Sign In</string>
     <string name="password_hint">Password</string>
     <string name="email_hint">Email</string>
     <string name="sign_up_button">Sign up</string>
-    <string name="not_valid_toast">Not Valid Credentials</string>
+    <string name="not_valid_toast">Email or password is not valid.</string>
     <string name="confirm_password_hint">Confirm Password</string>
-    <string name="sign_up_error_toast">Something went wrong...Sign up failed</string>
-    <string name="sign_in_error_toast">Something went wrong with signing in...</string>
+    <string name="sign_up_error_toast">Something went wrong…Sign up failed.</string>
+    <string name="sign_in_error_toast">Something went wrong with signing in…</string>
     <string name="sign_out">Sign Out</string>
+    <string name="message_update_error_toast">Something went wrong with updating messages…</string>
+    <string name="display_name_hint">Display Name</string>
+    <string name="display_name_add_error">Something went wrong adding display name…</string>
+    <string name="loading">Loading&#8230;</string>
+    <string name="date_header_yesterday">Yesterday</string>
+    <string name="sign_up_title">Sign up</string>
+    <string name="coming_soon">Coming soon…</string>
 </resources>
