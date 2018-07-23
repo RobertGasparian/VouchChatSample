@@ -8,12 +8,12 @@ import com.stfalcon.chatkit.commons.models.MessageContentType;
 import java.util.Date;
 
 @IgnoreExtraProperties
-public class ChatMessage implements IMessage, MessageContentType {
+public class ChatMessage implements IMessage, MessageContentType.Image {
 
     private String text;
     private String senderId;
     private String senderName;
-    private String imageUrl;
+    private String photoUrl;
     private long date;
 
     public ChatMessage() {
@@ -68,12 +68,18 @@ public class ChatMessage implements IMessage, MessageContentType {
         this.senderName = senderName;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getPhotoUrl() {
+        return photoUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
+    @Exclude
+    @Override
+    public String getImageUrl() {
+        return photoUrl;
     }
 
     public long getDate() {

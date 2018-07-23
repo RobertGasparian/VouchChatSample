@@ -1,8 +1,13 @@
 package com.cypress.vouchchatsample.activities;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
+import com.cypress.vouchchatsample.R;
 import com.cypress.vouchchatsample.fragments.LoadingDialogFragment;
 
 
@@ -34,5 +39,17 @@ public class BaseActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    public void showPickerDialog(DialogInterface.OnClickListener cameraListener, DialogInterface.OnClickListener galleyListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(BaseActivity.this);
+
+        builder.setMessage(R.string.picker_message);
+        builder.setPositiveButton(R.string.camera_option, cameraListener);
+        builder.setNegativeButton(R.string.gallery_option, galleyListener);
+        builder.setNeutralButton(R.string.cancel_option, (dialog, which) -> {
+            dialog.cancel();
+        });
+        builder.show();
     }
 }

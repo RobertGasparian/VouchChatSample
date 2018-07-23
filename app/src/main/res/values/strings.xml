@@ -18,4 +18,9 @@
     <string name="date_header_yesterday">Yesterday</string>
     <string name="sign_up_title">Sign up</string>
     <string name="coming_soon">Coming soon…</string>
+    <string name="camera_option">Take Picture</string>
+    <string name="gallery_option">Gallery</string>
+    <string name="cancel_option">Cancel</string>
+    <string name="picker_message">Please choose method</string>
+    <string name="permission_denied_toast">Sorry, but for this action we need some permissions</string>
 </resources>
