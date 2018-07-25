@@ -1,10 +1,16 @@
-package com.cypress.vouchchatsample.models;
+package me.vouch4.app.models;
+
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.HashMap;
 
+@IgnoreExtraProperties
 public class Channel {
 
+    @Exclude
     private String channelId;
+    @Exclude
     private String channelName;
     private HashMap<String, ChatMessage> messages;
 
@@ -18,6 +24,7 @@ public class Channel {
         messages = new HashMap<>();
     }
 
+    @Exclude
     public String getChannelId() {
         return channelId;
     }
@@ -26,6 +33,7 @@ public class Channel {
         this.channelId = channelId;
     }
 
+    @Exclude
     public String getChannelName() {
         return channelName;
     }

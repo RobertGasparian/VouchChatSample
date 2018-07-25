@@ -1,4 +1,4 @@
-package com.cypress.vouchchatsample.activities;
+package me.vouch4.app.activities;
 
 import android.Manifest;
 import android.content.ContentResolver;
@@ -21,9 +21,6 @@ import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.cypress.vouchchatsample.R;
-import com.cypress.vouchchatsample.models.Channel;
-import com.cypress.vouchchatsample.models.ChatMessage;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -47,17 +44,19 @@ import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.vouch4.app.models.Channel;
+import me.vouch4.app.models.ChatMessage;
 
 public class MainActivity extends BaseActivity {
 
     private final String TAG = this.getClass().getSimpleName();
 
 
-    @BindView(R.id.action_bar)
+    @BindView(me.vouch4.app.R.id.action_bar)
     Toolbar toolbar;
-    @BindView(R.id.message_list)
+    @BindView(me.vouch4.app.R.id.message_list)
     MessagesList messagesList;
-    @BindView(R.id.message_input)
+    @BindView(me.vouch4.app.R.id.message_input)
     MessageInput input;
 
     private final int CAMERA_REQCODE = 54;
@@ -78,7 +77,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(me.vouch4.app.R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         initFirebase();
@@ -90,14 +89,14 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
+        inflater.inflate(me.vouch4.app.R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_sign_out:
+            case me.vouch4.app.R.id.menu_sign_out:
                 FirebaseAuth.getInstance().signOut();
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
@@ -127,7 +126,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(MainActivity.this, R.string.message_update_error_toast, Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, me.vouch4.app.R.string.message_update_error_toast, Toast.LENGTH_LONG).show();
                 Log.d(TAG, "onCancelled: " + databaseError.getMessage());
             }
         });
@@ -170,7 +169,7 @@ public class MainActivity extends BaseActivity {
             if (taskCompleted.isSuccessful()) {
                 Uri url = taskCompleted.getResult();
                 ChatMessage imageMessage = new ChatMessage(null, displayName, userId);
-                imageMessage.setPhotoUrl(url.toString());
+                imageMessage.setPhotoURL(url.toString());
                 messagesReference.push().setValue(imageMessage)
                         .addOnSuccessListener(aVoid -> {
                             Log.d(TAG, "onSuccess: ");
@@ -247,7 +246,7 @@ public class MainActivity extends BaseActivity {
             if (DateFormatter.isToday(date)) {
                 return DateFormatter.format(date, DateFormatter.Template.TIME);
             } else if (DateFormatter.isYesterday(date)) {
-                return getString(R.string.date_header_yesterday);
+                return getString(me.vouch4.app.R.string.date_header_yesterday);
             } else {
                 return DateFormatter.format(date, DateFormatter.Template.STRING_DAY_MONTH_YEAR);
             }
@@ -261,7 +260,7 @@ public class MainActivity extends BaseActivity {
         userId = currentUser.getUid();
         displayName = currentUser.getDisplayName();
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        mainChannel = new Channel("main_channel_id", "Main Channel");
+        mainChannel = new Channel("android_test_channel", "Android Test Channel");
         channelReference = database.child("channels").child(mainChannel.getChannelId());
         messagesReference = channelReference.child("messages");
         addChangeListeners();
@@ -331,7 +330,7 @@ public class MainActivity extends BaseActivity {
                     Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(takePicture, CAMERA_REQCODE);
                 } else {
-                    Toast.makeText(MainActivity.this, R.string.permission_denied_toast, Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, me.vouch4.app.R.string.permission_denied_toast, Toast.LENGTH_LONG).show();
                 }
                 return;
             }
@@ -342,7 +341,7 @@ public class MainActivity extends BaseActivity {
                             android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(pickPhoto, GALLERY_REQCODE);
                 } else {
-                    Toast.makeText(MainActivity.this, R.string.permission_denied_toast, Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, me.vouch4.app.R.string.permission_denied_toast, Toast.LENGTH_LONG).show();
                 }
                 return;
             }

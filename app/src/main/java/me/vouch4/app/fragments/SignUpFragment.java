@@ -1,4 +1,4 @@
-package com.cypress.vouchchatsample.fragments;
+package me.vouch4.app.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,10 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.cypress.vouchchatsample.R;
-import com.cypress.vouchchatsample.Utils;
-import com.cypress.vouchchatsample.activities.BaseActivity;
-import com.cypress.vouchchatsample.activities.MainActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -24,16 +20,19 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.vouch4.app.Utils;
+import me.vouch4.app.activities.BaseActivity;
+import me.vouch4.app.activities.MainActivity;
 
 public class SignUpFragment extends Fragment {
 
-    @BindView(R.id.email_edit)
+    @BindView(me.vouch4.app.R.id.email_edit)
     EditText email;
-    @BindView(R.id.password_edit)
+    @BindView(me.vouch4.app.R.id.password_edit)
     EditText password;
-    @BindView(R.id.password_confirm_edit)
+    @BindView(me.vouch4.app.R.id.password_confirm_edit)
     EditText passwordConfirm;
-    @BindView(R.id.display_name_edit)
+    @BindView(me.vouch4.app.R.id.display_name_edit)
     EditText displayName;
 
     private FirebaseAuth auth;
@@ -51,7 +50,7 @@ public class SignUpFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_sign_up, container, false);
+        return inflater.inflate(me.vouch4.app.R.layout.fragment_sign_up, container, false);
     }
 
     @Override
@@ -61,7 +60,7 @@ public class SignUpFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
     }
 
-    @OnClick(R.id.sign_up_btn)
+    @OnClick(me.vouch4.app.R.id.sign_up_btn)
     public void signUp(Button button) {
         if (Utils.isValidEmail(email.getText())
                 && !displayName.getText().toString().trim().isEmpty()
@@ -70,7 +69,7 @@ public class SignUpFragment extends Fragment {
                 && passwordConfirm.getText().toString().equals(password.getText().toString())) {
             createAccount(email.getText().toString(), password.getText().toString());
         } else {
-            Toast.makeText(getActivity(), R.string.not_valid_toast, Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), me.vouch4.app.R.string.not_valid_toast, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -81,7 +80,7 @@ public class SignUpFragment extends Fragment {
                 addDisplayName();
             } else {
                 ((BaseActivity) getActivity()).dismissLoadingDialog();
-                Toast.makeText(getActivity(), R.string.sign_up_error_toast, Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), me.vouch4.app.R.string.sign_up_error_toast, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -97,7 +96,7 @@ public class SignUpFragment extends Fragment {
             getActivity().finish();
         }).addOnFailureListener(e -> {
             ((BaseActivity) getActivity()).dismissLoadingDialog();
-            Toast.makeText(getActivity(), getString(R.string.display_name_add_error), Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), getString(me.vouch4.app.R.string.display_name_add_error), Toast.LENGTH_LONG).show();
             Log.d(TAG, "addDisplayName: failure: " + e.getMessage());
         });
     }

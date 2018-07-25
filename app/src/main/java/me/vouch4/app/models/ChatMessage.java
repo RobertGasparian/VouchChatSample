@@ -1,4 +1,4 @@
-package com.cypress.vouchchatsample.models;
+package me.vouch4.app.models;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
@@ -13,7 +13,7 @@ public class ChatMessage implements IMessage, MessageContentType.Image {
     private String text;
     private String senderId;
     private String senderName;
-    private String photoUrl;
+    private String photoURL;
     private long date;
 
     public ChatMessage() {
@@ -68,18 +68,18 @@ public class ChatMessage implements IMessage, MessageContentType.Image {
         this.senderName = senderName;
     }
 
-    public String getPhotoUrl() {
-        return photoUrl;
+    public String getPhotoURL() {
+        return photoURL;
     }
 
-    public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
+    public void setPhotoURL(String photoUrl) {
+        this.photoURL = photoUrl;
     }
 
     @Exclude
     @Override
     public String getImageUrl() {
-        return photoUrl;
+        return photoURL;
     }
 
     public long getDate() {

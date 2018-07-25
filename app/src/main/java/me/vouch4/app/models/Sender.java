@@ -1,4 +1,4 @@
-package com.cypress.vouchchatsample.models;
+package me.vouch4.app.models;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.stfalcon.chatkit.commons.models.IUser;

@@ -1,4 +1,4 @@
-package com.cypress.vouchchatsample.fragments;
+package me.vouch4.app.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,26 +13,25 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cypress.vouchchatsample.R;
-import com.cypress.vouchchatsample.Utils;
-import com.cypress.vouchchatsample.activities.BaseActivity;
-import com.cypress.vouchchatsample.activities.MainActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.vouch4.app.Utils;
+import me.vouch4.app.activities.BaseActivity;
+import me.vouch4.app.activities.MainActivity;
 
 
 public class LoginFragment extends Fragment {
 
-    @BindView(R.id.email_edit)
+    @BindView(me.vouch4.app.R.id.email_edit)
     EditText email;
-    @BindView(R.id.pass_edit)
+    @BindView(me.vouch4.app.R.id.pass_edit)
     EditText password;
-    @BindView(R.id.sign_up_tv)
+    @BindView(me.vouch4.app.R.id.sign_up_tv)
     TextView signUp;
-    @BindView(R.id.login_btn)
+    @BindView(me.vouch4.app.R.id.login_btn)
     Button login;
 
     private FirebaseAuth auth;
@@ -49,7 +48,7 @@ public class LoginFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_login, container, false);
+        return inflater.inflate(me.vouch4.app.R.layout.fragment_login, container, false);
     }
 
     @Override
@@ -59,21 +58,21 @@ public class LoginFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
     }
 
-    @OnClick(R.id.sign_up_tv)
+    @OnClick(me.vouch4.app.R.id.sign_up_tv)
     public void signUp(TextView view) {
         getFragmentManager()
                 .beginTransaction()
-                .replace(R.id.root_layout, SignUpFragment.newInstance())
+                .replace(me.vouch4.app.R.id.root_layout, SignUpFragment.newInstance())
                 .addToBackStack("")
                 .commit();
     }
 
-    @OnClick(R.id.login_btn)
+    @OnClick(me.vouch4.app.R.id.login_btn)
     public void login(Button button) {
         if (Utils.isValidEmail(email.getText()) && password.getText().length() != 0) {
             login(email.getText().toString(), password.getText().toString());
         } else {
-            Toast.makeText(getActivity(), R.string.not_valid_toast, Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), me.vouch4.app.R.string.not_valid_toast, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -87,7 +86,7 @@ public class LoginFragment extends Fragment {
                 getActivity().finish();
             } else {
                 ((BaseActivity) getActivity()).dismissLoadingDialog();
-                Toast.makeText(getActivity(), R.string.sign_in_error_toast, Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), me.vouch4.app.R.string.sign_in_error_toast, Toast.LENGTH_LONG).show();
             }
         });
     }

@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "654163280788",
-    "firebase_url": "https://vouchchatsample.firebaseio.com",
-    "project_id": "vouchchatsample",
-    "storage_bucket": "vouchchatsample.appspot.com"
+    "project_number": "653550879665",
+    "firebase_url": "https://vouch-aaa4c.firebaseio.com",
+    "project_id": "vouch-aaa4c",
+    "storage_bucket": "vouch-aaa4c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:654163280788:android:bd88a2422b401790",
+        "mobilesdk_app_id": "1:653550879665:android:2bbaabb42952f439",
         "android_client_info": {
-          "package_name": "com.cypress.vouchchatsample"
+          "package_name": "me.vouch4.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "654163280788-2ff7g12pfna8hoaab38pbns737m6fn23.apps.googleusercontent.com",
+          "client_id": "653550879665-e3qg2r6q7okglj6p66chq49k7139rsju.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDPoM-Dkw9MMnBWtcoqprP32ussU76zyJY"
+          "current_key": "AIzaSyCI7rcm3Jb4-q7f1VoUemtdDWEPdoBy-eg"
         }
       ],
       "services": {

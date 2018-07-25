@@ -1,4 +1,4 @@
-package com.cypress.vouchchatsample.fragments;
+package me.vouch4.app.fragments;
 
 import android.app.Dialog;
 import android.graphics.Color;
@@ -12,8 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-
-import com.cypress.vouchchatsample.R;
 
 public class LoadingDialogFragment extends DialogFragment {
 
@@ -31,7 +29,7 @@ public class LoadingDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.dialog_fragment_loading, container, false);
+        return inflater.inflate(me.vouch4.app.R.layout.dialog_fragment_loading, container, false);
     }
 
     @NonNull

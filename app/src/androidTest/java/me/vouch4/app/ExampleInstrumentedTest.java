@@ -1,4 +1,4 @@
-package com.cypress.vouchchatsample;
+package me.vouch4.app;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
