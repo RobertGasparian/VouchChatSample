@@ -10,6 +10,10 @@ import java.util.Date;
 @IgnoreExtraProperties
 public class ChatMessage implements IMessage, MessageContentType.Image {
 
+    @Exclude
+    private String messageId;
+    @Exclude
+    private boolean isLoading;
     private String text;
     private String senderId;
     private String senderName;
@@ -29,7 +33,11 @@ public class ChatMessage implements IMessage, MessageContentType.Image {
     @Exclude
     @Override
     public String getId() {
-        return senderId;
+        return messageId;
+    }
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
     }
 
     public String getText() {
@@ -80,6 +88,16 @@ public class ChatMessage implements IMessage, MessageContentType.Image {
     @Override
     public String getImageUrl() {
         return photoURL;
+    }
+
+    @Exclude
+    public void setLoading(boolean isLoading){
+        this.isLoading = isLoading;
+    }
+
+    @Exclude
+    public boolean isLoading(){
+        return isLoading;
     }
 
     public long getDate() {

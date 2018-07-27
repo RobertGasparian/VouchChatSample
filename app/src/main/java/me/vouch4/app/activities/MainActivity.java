@@ -1,10 +1,10 @@
 package me.vouch4.app.activities;
 
 import android.Manifest;
-import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -17,10 +17,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,23 +38,30 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.stfalcon.chatkit.messages.MessageHolders;
 import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
 import com.stfalcon.chatkit.messages.MessagesListAdapter;
 import com.stfalcon.chatkit.utils.DateFormatter;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.vouch4.app.R;
+import me.vouch4.app.adapters.CustomOutcomingHolder;
 import me.vouch4.app.models.Channel;
 import me.vouch4.app.models.ChatMessage;
 
 public class MainActivity extends BaseActivity {
 
     private final String TAG = this.getClass().getSimpleName();
+    private static final String BASE_FIREBASE_STORAGE_URL = "https://firebasestorage.googleapis.com/v0/b/vouch-aaa4c.appspot.com/o/";
 
 
     @BindView(me.vouch4.app.R.id.action_bar)
@@ -152,11 +164,19 @@ public class MainActivity extends BaseActivity {
     }
 
     private void uploadImage(Uri uri) {
+        ChatMessage imageMessage = new ChatMessage(null, displayName, userId);
+        imageMessage.setPhotoURL(uri.toString());
+        DatabaseReference pushed = messagesReference.push();
+        String messageId = pushed.getKey();
+        imageMessage.setMessageId(messageId);
+        imageMessage.setLoading(true);
+        adapter.addToStart(imageMessage, true);
+
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        ContentResolver cR = MainActivity.this.getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        String fileExtension = mime.getExtensionFromMimeType(cR.getType(uri));
-        String path = "channels/" + mainChannel.getChannelId() + "/" + UUID.randomUUID() + fileExtension;
+//        ContentResolver cR = MainActivity.this.getContentResolver();
+//        MimeTypeMap mime = MimeTypeMap.getSingleton();
+//        String fileExtension = mime.getExtensionFromMimeType(cR.getType(uri));
+        String path = "channels/" + mainChannel.getChannelId() + "/" + UUID.randomUUID() + ".JPEG";
         StorageReference currentChanelRef = storage.getReference(path);
         UploadTask task = currentChanelRef.putFile(uri);
         Task<Uri> urlTask = task.continueWithTask(taskInProgress -> {
@@ -167,10 +187,19 @@ public class MainActivity extends BaseActivity {
             return currentChanelRef.getDownloadUrl();
         }).addOnCompleteListener(MainActivity.this, taskCompleted -> {
             if (taskCompleted.isSuccessful()) {
-                Uri url = taskCompleted.getResult();
-                ChatMessage imageMessage = new ChatMessage(null, displayName, userId);
-                imageMessage.setPhotoURL(url.toString());
-                messagesReference.push().setValue(imageMessage)
+//                Uri url = taskCompleted.getResult();
+                List<String> parts = taskCompleted.getResult().getPathSegments();
+                String initialUrl = parts.get(parts.size() - 1);
+                String finalUrl = null;
+                try {
+                    finalUrl = URLEncoder.encode(initialUrl, "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                ChatMessage urlMessage = new ChatMessage(null, displayName, userId);
+                urlMessage.setMessageId(messageId);
+                urlMessage.setPhotoURL(finalUrl);
+                pushed.setValue(urlMessage)
                         .addOnSuccessListener(aVoid -> {
                             Log.d(TAG, "onSuccess: ");
                         })
@@ -178,7 +207,7 @@ public class MainActivity extends BaseActivity {
                             Log.d(TAG, "initInputEvent: " + e.getMessage());
                         });
             } else {
-                //TODO: handle failure
+                Toast.makeText(MainActivity.this, "Sorry, something went wrong with uploading image", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -210,8 +239,13 @@ public class MainActivity extends BaseActivity {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 ChatMessage message = dataSnapshot.getValue(ChatMessage.class);
                 if (message != null) {
+                    message.setMessageId(dataSnapshot.getKey());
                     messages.add(message);
-                    adapter.addToStart(message, true);
+                    if(!adapter.update(message)){
+                        adapter.addToStart(message, true);
+                    }else{
+                        Log.d( "update_checker", "update: ");
+                    }
                 } else {
                     Log.d(TAG, "onChildAdded: message is null");
                 }
@@ -219,12 +253,16 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                //TODO: handle message edit
+                String key = dataSnapshot.getKey();
+                ChatMessage message = dataSnapshot.getValue(ChatMessage.class);
+                message.setMessageId(key);
+                adapter.update(key, message);
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                //TODO: handle message remove
+                String key = dataSnapshot.getKey();
+                adapter.deleteById(key);
             }
 
             @Override
@@ -240,7 +278,47 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initAdapter(String senderId, List<ChatMessage> messages) {
-        adapter = new MessagesListAdapter<>(senderId, (imageView, url) -> Glide.with(MainActivity.this).load(url).into(imageView));
+
+        MessageHolders holdersConfig = new MessageHolders()
+                .setOutcomingImageConfig(
+                        CustomOutcomingHolder.class,
+                        R.layout.message_image_outcoming);
+        adapter = new MessagesListAdapter<>(senderId, holdersConfig, (imageView, url) -> {
+
+            if (url.startsWith("channels")) {
+                try {
+                    String path = URLDecoder.decode(url, "UTF-8");
+                    FirebaseStorage.getInstance().getReference(path).getDownloadUrl().addOnSuccessListener(MainActivity.this, uri -> {
+                        Glide.with(MainActivity.this)
+                                .load(uri.toString())
+                                .apply(new RequestOptions()
+                                .placeholder(imageView.getDrawable()))
+                                .listener(new RequestListener<Drawable>() {
+                                    @Override
+                                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                        Log.d("glide_load_checker", "datasource: "+ dataSource);
+                                        return false;
+                                    }
+                                })
+                                .into(imageView);
+                    }).addOnFailureListener(MainActivity.this, e -> {
+                        Toast.makeText(MainActivity.this, "Error while getting downloadUrl: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    });
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+
+            }else{
+                Glide.with(MainActivity.this).load(url).into(imageView);
+            }
+
+
+        });
         adapter.addToEnd(messages, false);
         adapter.setDateHeadersFormatter(date -> {
             if (DateFormatter.isToday(date)) {
@@ -269,7 +347,10 @@ public class MainActivity extends BaseActivity {
     private void initInputEvent() {
         input.setInputListener(input -> {
             ChatMessage message = new ChatMessage(input.toString(), displayName, userId);
-            messagesReference.push().setValue(message)
+            DatabaseReference pushed = messagesReference.push();
+            String messageId = pushed.getKey();
+            message.setMessageId(messageId);
+            pushed.setValue(message)
                     .addOnSuccessListener(aVoid -> {
                         Log.d(TAG, "onSuccess: ");
                     })
